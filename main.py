@@ -1,7 +1,8 @@
 import requests
 from PIL import Image
 from io import BytesIO
-
+from pydub import AudioSegment
+from pydub.playback import play
 
 def main():
     print("Hello, welcome to the python pokedex!")
@@ -9,7 +10,7 @@ def main():
     pokemon_name = input()
     pokemon = get_pokemon(pokemon_name)
     print_sprite(pokemon)
-    
+    play_sound(pokemon)   
 
 def get_pokemon(pokemon_name):
     pokemon_name = pokemon_name.replace(" ", "-").lower()
@@ -31,6 +32,12 @@ def print_pokemon(pokemon):
 
 def rgb_to_ansi(r, g, b):
     return f"\033[48;2;{r};{g};{b}m  \033[0m"
+
+def play_sound(pokemon):
+    url = pokemon['cries']['latest']
+    response = requests.get(url)
+    audio = AudioSegment.from_file(BytesIO(response.content), format="ogg")
+    play(audio)
 
 def print_sprite(pokemon):
     url = pokemon['sprites']['front_default']
