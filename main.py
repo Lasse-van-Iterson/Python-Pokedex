@@ -2,12 +2,13 @@ import requests
 from PIL import Image
 from io import BytesIO
 
+
 def main():
     print("Hello, welcome to the python pokedex!")
     print("Please enter the name or id of the pokemon you would like to search for: ")
     pokemon_name = input()
     pokemon = get_pokemon(pokemon_name)
-    print_pokemon(pokemon)
+    print_sprite(pokemon)
     
 
 def get_pokemon(pokemon_name):
@@ -31,10 +32,13 @@ def print_pokemon(pokemon):
 def rgb_to_ansi(r, g, b):
     return f"\033[48;2;{r};{g};{b}m  \033[0m"
 
-def print_sprite(url):
+def print_sprite(pokemon):
+    url = pokemon['sprites']['front_default']
+    info_height = 30
     response = requests.get(url)
     if response.status_code == 200:
         img = Image.open(BytesIO(response.content))
+        print(img.width, img.height)
         img = img.crop((15, 15, 90, 90)) 
         img = img.resize((40, 40))  
 
@@ -56,7 +60,21 @@ def print_sprite(url):
                 else: 
                     r, g, b = pixel
                     print(rgb_to_ansi(r, g, b), end='')
-            print('')
+            if y == info_height:
+                print(f"Name: {pokemon['name']}")
+            elif y ==  info_height + 1:
+                print(f"ID: {pokemon['id']}")
+            elif y == info_height + 2:
+                print(f"Height: {pokemon['height']}")
+            elif y == info_height + 3:
+                print(f"Weight: {pokemon['weight']}")
+            elif y == info_height + 4:
+                print(f"Types: {', '.join([f' {t["type"]["name"]}' for t in pokemon["types"]])}")
+            elif y == info_height + 5:
+                print(f"First game apperance: {pokemon['game_indices'][0]['version']['name']}")
+
+            else:
+                print('')
 
 if __name__ == "__main__":
     main()
