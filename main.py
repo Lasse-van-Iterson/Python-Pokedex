@@ -12,7 +12,7 @@ def main():
         url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}"
         response = requests.get(url) 
         if response.status_code != 200:
-            print(f"I could not find that pokeom, please try again")
+            print(f"I could not find that pokemon, please try again")
         else: break
     print(response.status_code)      
     pokemon = response.json()
@@ -54,7 +54,7 @@ def print_sprite(pokemon):
     if response.status_code == 200:
         img = Image.open(BytesIO(response.content))
         print(img.width, img.height)
-        img = img.crop((15, 15, 90, 90)) 
+        img = img.crop((5, 5, 90, 90)) 
         img = img.resize((40, 40))  
 
         
