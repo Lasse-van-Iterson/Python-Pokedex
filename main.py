@@ -5,18 +5,30 @@ from pydub import AudioSegment
 from pydub.playback import play
 
 def main():
-    print("Hello, welcome to the python pokedex!")
     print("Please enter the name or id of the pokemon you would like to search for: ")
-    pokemon_name = input()
-    pokemon = get_pokemon(pokemon_name)
+    while True:
+        pokemon_name = input()
+        pokemon_name = pokemon_name.replace(" ", "-").lower()
+        url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}"
+        response = requests.get(url) 
+        if response.status_code != 200:
+            print(f"I could not find that pokeom, please try again")
+        else: break
+    print(response.status_code)      
+    pokemon = response.json()
     print_sprite(pokemon)
-    play_sound(pokemon)   
+    play_sound(pokemon)
+    repeat = input("Would you like to search for another pokemon? (y/n)")
+    if repeat.lower() == 'y':
+        main()
+    else:
+        print("We hope to see you again!")
+
+def invalid_pokemon():
+    print("Invalid pokemon name or id, please try again")
 
 def get_pokemon(pokemon_name):
-    pokemon_name = pokemon_name.replace(" ", "-").lower()
-    url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}"
-    response = requests.get(url)        
-    pokemon = response.json()
+    
     return pokemon
 
 def print_pokemon(pokemon):
@@ -84,4 +96,5 @@ def print_sprite(pokemon):
                 print('')
 
 if __name__ == "__main__":
+    print("Hello, welcome to the python pokedex!")
     main()
