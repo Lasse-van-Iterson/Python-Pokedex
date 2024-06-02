@@ -27,10 +27,6 @@ def main():
 def invalid_pokemon():
     print("Invalid pokemon name or id, please try again")
 
-def get_pokemon(pokemon_name):
-    
-    return pokemon
-
 def print_pokemon(pokemon):
     print(f"Name: {pokemon['name']}")
     print(f"ID: {pokemon['id']}")
